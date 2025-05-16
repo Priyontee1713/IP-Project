@@ -1,0 +1,115 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', sans-serif;
+  }
+  
+  body {
+    background-color: #a8dde2;
+    color: #000e38;
+  }
+  
+  header {
+    background-color: #0077b6;
+    color: white;
+    padding: 1.5rem;
+    text-align: center;
+  }
+  
+  .hero {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 1rem 2rem 1rem 2rem; 
+    flex-wrap: wrap;
+  }
+  
+  .hero img {
+    max-width: 250px;
+    margin: 1rem;
+  }
+  
+  .hero-text {
+    max-width: 700px;
+    font-size: 3 rem
+    ;
+    color: #000e38;
+  }
+  
+  .subjects {
+    padding: 0.2rem 1rem 0.5rem 1rem; /* reduce top padding */
+    text-align: center;
+  }
+
+  #subjectSelector {
+    padding: 0.5rem 1rem;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    font-size: 1rem;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    
+  }
+  
+  #flashcardTitle {
+    display: none;
+  }
+    
+  .flashcard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    padding: 2rem;
+  }
+  
+  .flashcard {
+    perspective: 1000px;
+  }
+  
+  .card-inner {
+    position: relative;
+    width: 100%;
+    height: 200px;
+    text-align: center;
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+    cursor: pointer;
+  }
+  
+  .card-inner.flipped {
+    transform: rotateY(180deg);
+  }
+  
+  .card-front,
+  .card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    padding: 1rem;
+    font-size: 1rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .card-front {
+    background-color: #caf0f8;
+    font-weight: bold;
+  }
+  
+  .card-back {
+    background-color: #90e0ef;
+    transform: rotateY(180deg);
+  }
+  
+  footer {
+    background-color: #0077b6;
+    color: white;
+    text-align: center;
+    padding: 1rem;
+    margin-top: 2rem;
+  }

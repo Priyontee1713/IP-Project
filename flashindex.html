@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Smart Flashcards</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="flashstyles.css">
+</head>
+
+<body>
+
+  <section class="hero">
+    <img src="holding flashcard.png" alt="Person with flashcard">
+
+    <div class="hero-text">
+      <h2>Flashcards that actually stick to your brain!</h2>
+      <p>Learn faster, forget slower — study smart in a snap!</p>
+    </div>
+    
+    <img src="person with computer.png" alt="Person at computer">
+  </section>
+  <section class="subjects">
+    <h2>Select Subject:</h2>
+    <select id="subjectSelector">
+      <option value="english">English Literature</option>
+      <option value="science">Science</option>
+      <option value="math">Mathematics</option>
+    </select>
+    <div id="flashcardTitle"><h2>Subject: English Literature</h2></div>
+    <div class="flashcard-grid" id="flashcardGrid">
+      <div class="flashcard">
+        <div class="card-inner">
+          <div class="card-front">Simile</div>
+          <div class="card-back">A comparison using "like" or "as" to emphasize similarities.</div>
+        </div>
+      </div>
+
+      <div class="flashcard">
+        <div class="card-inner">
+          <div class="card-front">Metaphor</div>
+          <div class="card-back">A comparison where one idea becomes another.</div>
+        </div>
+      </div>
+
+      <div class="flashcard">
+        <div class="card-inner">
+          <div class="card-front">Allusion</div>
+          <div class="card-back">A reference to something outside the work, often historical or literary.</div>
+        </div>
+      </div>
+
+      <div class="flashcard">
+        <div class="card-inner">
+          <div class="card-front">Symbol</div>
+          <div class="card-back">A concrete object representing an abstract idea.</div>
+        </div>
+      </div>
+
+      <div class="flashcard">
+        <div class="card-inner">
+          <div class="card-front">Motif</div>
+          <div class="card-back">Repetition of an image or idea throughout a work.</div>
+        </div>
+      </div>
+
+      <div class="flashcard">
+        <div class="card-inner">
+          <div class="card-front">Mood</div>
+          <div class="card-back">The emotional effect on the reader.</div>
+        </div>
+      </div>
+      <div class="flashcard">
+        <div class="card-inner">
+          <div class="card-front">Tone</div>
+          <div class="card-back">The speaker's attitude towards the subject of a text, developed through diction and syntax.</div>
+        </div>
+      </div>
+      <div class="flashcard">
+        <div class="card-inner">
+          <div class="card-front">Imagery</div>
+          <div class="card-back">The sensory details in a text,engaging as many of the five senses as possible in the description.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>&copy; 2025 Smart Flashcards. All rights reserved.</p>
+  </footer>
+
+  <script src="flashscript.js"></script>
+</body>
+</html>

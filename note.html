@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Study Notes</title>
+  <link rel="stylesheet" href="notestyles.css"/>
+</head>
+<body>
+  <div class="container">
+    <div class="sidebar">
+      <button class="new-note">+ New Note</button>
+      <label class="open-note">Open note:</label>
+      <ul class="note-list">
+        <li onclick="loadNote('bangla')">Bangla</li>
+        <li onclick="loadNote('english')">English</li>
+        <li onclick="loadNote('cse')">CSE</li>
+      </ul>
+    </div>
+    
+
+    <div class="note-editor">
+      <div class="toolbar">
+
+        <div class="note-actions">
+          <button id="undo-btn" type="button"><img src="undo.png" alt="Logo" width="12" height="12"/></button>
+          <button id="redo-btn" type="button"><img src="redo.png" alt="Logo" width="12" height="12" /></button>
+          <button id="save-btn" type="button">Save</button>
+        </div>
+        
+        <select id="font-family">
+  <option value="Arial">Arial</option>
+  <option value="Helvetica">Helvetica</option>
+  <option value="Georgia">Georgia</option>
+  <option value="Times New Roman">Times New Roman</option>
+  <option value="Courier New">Courier New</option>
+  <option value="Verdana">Verdana</option>
+  <option value="Trebuchet MS">Trebuchet MS</option>
+  <option value="Lucida Console">Lucida Console</option>
+  <option value="Palatino Linotype">Palatino Linotype</option>
+  <option value="Tahoma">Tahoma</option>
+  <option value="Comic Sans MS">Comic Sans MS</option>
+  <option value="Impact">Impact</option>
+  <option value="Segoe UI">Segoe UI</option>
+  <option value="Monaco">Monaco</option>
+</select>
+
+        
+        <select id="font-size">
+          <option value="20px">10</option>
+          <option value="24px">11</option>
+          <option value="16px">12</option>
+          <option value="18px">13</option>
+          <option value="20px">14</option>
+          <option value="24px">15</option>
+          <option value="16px">16</option>
+          <option value="18px">18</option>
+          <option value="20px">20</option>
+          <option value="24px">24</option>
+        </select>
+
+        <div class="color-dropdown">
+          <button id="color-button" type="button">A ▼</button>
+          <div class="color-palette" id="color-palette">
+            <div class="color-row">
+              <div class="color-swatch" style="background-color: black;" data-color="#000000"></div>
+              <div class="color-swatch" style="background-color: white;" data-color="#FFFFFF"></div>
+              <div class="color-swatch" style="background-color: #1f4e79;" data-color="#1f4e79"></div>
+              <div class="color-swatch" style="background-color: #0078d4;" data-color="#0078d4"></div>
+              <div class="color-swatch" style="background-color: #00B050;" data-color="#00B050"></div>
+              <div class="color-swatch" style="background-color: #7030a0;" data-color="#7030a0"></div>
+            </div>
+            <div class="color-row">
+              <div class="color-swatch" style="background-color: red;" data-color="red"></div>
+              <div class="color-swatch" style="background-color: orange;" data-color="orange"></div>
+              <div class="color-swatch" style="background-color: yellow;" data-color="yellow"></div>
+              <div class="color-swatch" style="background-color: green;" data-color="green"></div>
+              <div class="color-swatch" style="background-color: blue;" data-color="blue"></div>
+              <div class="color-swatch" style="background-color: purple;" data-color="purple"></div>
+            </div>
+          </div>
+        </div>
+        
+        
+
+        <button onclick="formatText('bold')"><b>B</b></button>
+        <button onclick="formatText('italic')"><i>I</i></button>
+        <button onclick="formatText('underline')" title="Underline"><u>U</u></button>
+        <button onclick="formatText('strikeThrough')" title="Strikethrough"><s>S</s></button>
+
+        <button onclick="formatText('justifyLeft')" title="Align Left">≡</button>
+        <button onclick="formatText('insertUnorderedList')" title="Bullet List">•≡</button>
+        <button onclick="formatText('insertOrderedList')" title="Numbered List">1≡</button>
+        
+        <!-- "+" Button and Hidden File Input -->
+      <button type="button" id="add-image-btn">+</button>
+      <input type="file" id="image-input" accept="image/*" style="display: none;">
+
+       
+      </div>
+
+      <input type="text" id="note-title" placeholder="Title" class="title-input"/>
+      
+      <div id="note-body" class="note-body" contenteditable="true" data-placeholder="Start writing.."></div>
+
+    </div>
+  </div>
+  <script src="notescript.js"></script>
+</body>
+</html>
