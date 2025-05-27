@@ -1,74 +1,598 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MindPalette</title>
-    <!-- Poppins font from Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="h1.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MindPalette</title>
+  <meta name="description" content="MindPalette: AI-powered educational tools including note storage, quizzes, flashcards, and planners to help you learn smarter." />
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap"
+    rel="stylesheet"
+  />
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background-color: #fdf3dd;
+      color: #333;
+      font-size: 16px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      line-height: 1.5;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+      transition: color 0.3s ease;
+    }
+
+    a:hover {
+      color: #6a4c93;
+    }
+
+    /* Header */
+    .header {
+      width: 90vw;
+      max-width: 1400px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 20px 0 10px;
+      margin-top: 20px;
+      user-select: none;
+    }
+
+    .logo {
+      height: 50px;
+      width: auto;
+    }
+
+    .header-text h1 {
+      font-size: 2.5rem;
+      color: #6a4c93;
+      line-height: 1;
+      font-weight: 700;
+    }
+
+    .header-text p {
+      font-size: 1.2rem;
+      color: #777;
+      margin-top: 4px;
+      font-weight: 500;
+    }
+
+    /* Hero Banner */
+    .hero-banner {
+      text-align: center;
+      padding: 60px 20px;
+      background: linear-gradient(90deg, #6a4c93, #a18cd1);
+      color: #fff;
+      border-radius: 20px;
+      width: 90vw;
+      max-width: 1400px;
+      margin-bottom: 40px;
+      box-shadow: 0 12px 25px rgba(106, 76, 147, 0.35);
+    }
+
+    .hero-banner h2 {
+      font-size: 2.75rem;
+      margin-bottom: 15px;
+      font-weight: 700;
+      text-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    }
+
+    .hero-banner p {
+      font-size: 1.25rem;
+      margin-bottom: 30px;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 1.5;
+      font-weight: 500;
+      text-shadow: 0 1px 4px rgba(0,0,0,0.2);
+    }
+
+    .btn-primary {
+      background: #fdf3dd;
+      color: #6a4c93;
+      font-weight: 600;
+      padding: 14px 40px;
+      border-radius: 40px;
+      font-size: 1.2rem;
+      transition: background-color 0.3s ease, color 0.3s ease;
+      display: inline-block;
+      user-select: none;
+      box-shadow: 0 5px 10px rgba(255 255 255 / 0.8);
+      border: 2px solid transparent;
+    }
+
+    .btn-primary:hover {
+      background: transparent;
+      color: #fdf3dd;
+      border-color: #fdf3dd;
+      cursor: pointer;
+      box-shadow: 0 0 15px #fdf3dd;
+    }
+
+    /* Main Layout */
+    .main-layout {
+      display: grid;
+      grid-template-columns: 320px minmax(0, 1fr);
+      grid-template-rows: auto repeat(3, 200px);
+      column-gap: 40px;
+      row-gap: 30px;
+      width: 90vw;
+      max-width: 1400px;
+      margin-bottom: 60px;
+    }
+
+    /* Left Column */
+    .left-column {
+      grid-column: 1;
+      grid-row: 2 / span 3;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    /* Big Card */
+    .big-card {
+      background-color: #d6e8f7;
+      color: #cb962e;
+      border-radius: 20px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+      padding: 30px 25px;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      cursor: pointer;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      text-align: center;
+      user-select: none;
+      font-weight: 600;
+      font-size: 1.4rem;
+    }
+
+    .big-card:hover {
+      transform: translateY(-10px) scale(1.03);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.18);
+    }
+
+    .big-card img {
+      max-width: 220px;
+      max-height: 220px;
+      margin-top: 20px;
+      object-fit: contain;
+      pointer-events: none;
+      filter: none;
+      border: none;
+    }
+
+    .big-card .plus {
+      position: absolute;
+      top: 18px;
+      right: 15px;
+      background-color: rgba(0, 0, 0, 0.15);
+      color: #444;
+      font-weight: 700;
+      font-size: 28px;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      line-height: 36px;
+      text-align: center;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25);
+      user-select: none;
+      pointer-events: none;
+    }
+
+    /* Right Column */
+    .right-column {
+      grid-column: 2;
+      grid-row: 2 / span 3;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      grid-template-rows: repeat(3, 1fr);
+      gap: 30px 50px;
+      height: 100%;
+      width: 100%;
+      justify-content: stretch;
+      padding-left: 10px;
+      padding-right: 10px;
+      box-sizing: border-box;
+    }
+
+    /* Cards */
+    .card {
+      background-color: #fff;
+      border-radius: 20px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+      text-align: center;
+      padding: 25px 20px;
+      position: relative;
+      cursor: pointer;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      width: 100%;
+      height: 100%;
+      user-select: none;
+      font-weight: 600;
+      font-size: 1.15rem;
+      color: inherit;
+    }
+
+    .card:hover {
+      transform: translateY(-10px) scale(1.03);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.18);
+    }
+
+    /* Card Icon Container */
+    .card-icon {
+      position: relative;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      margin-left: 80px;
+    }
+
+    /* Card icon images */
+    .card img {
+      max-width: 180px;
+      max-height: 160px;
+      object-fit: contain;
+      pointer-events: none;
+      filter: none;
+      border: none;
+    }
+
+    /* Plus sign */
+    .plus {
+      position: absolute;
+      top: 12px;
+      right: 15px;
+      background-color: rgba(0, 0, 0, 0.15);
+      color: #444;
+      font-weight: 700;
+      font-size: 24px;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      line-height: 30px;
+      text-align: center;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25);
+      user-select: none;
+      pointer-events: none;
+    }
+
+    /* Individual card colors */
+    .ai-assistant {
+      background-color: #caaacd;
+      color: #fdf3dd;
+    }
+
+    .quiz-mode {
+      background-color: #dfaf65;
+      color: #fdf3dd;
+    }
+
+    .flash-card-generator {
+      background-color: #a8dde2;
+      color: #2c2f6f;
+    }
+
+    .study-planner {
+      background-color: #c2cc8f;
+      color: #6a73d6;
+    }
+
+    .study-tracker {
+      background-color: #ff92a4;
+      color: #2c2f6f;
+    }
+
+    .daily-revision-planner {
+      background-color: #f9dca8;
+      color: #ef601e;
+    }
+
+    /* Info section */
+    .info-section {
+      padding: 50px 30px;
+      background-color: #fef6e4;
+      width: 90vw;
+      max-width: 1400px;
+      margin-bottom: 80px;
+      border-radius: 25px;
+      display: flex;
+      flex-direction: row;
+      gap: 50px;
+      justify-content: center;
+      box-sizing: border-box;
+      flex-wrap: wrap;
+      box-shadow: 0 15px 40px rgba(106, 76, 147, 0.12);
+    }
+
+    .info-box {
+      flex: 1 1 400px;
+      background: linear-gradient(135deg, #d1e7e0, #a1c4c9);
+      border-radius: 25px;
+      padding: 40px 50px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+      color: #2e3a46;
+      font-weight: 600;
+      font-size: 1.25rem;
+      line-height: 1.6;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      user-select: none;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .info-box:hover {
+      transform: translateY(-12px) scale(1.04);
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.16);
+    }
+
+    .info-box h2 {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+      color: #3b4a59;
+      position: relative;
+      padding-left: 50px;
+      font-weight: 700;
+    }
+
+    /* Icon before the title */
+    .info-box h2::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 10px;
+      width: 40px;
+      height: 40px;
+      background-repeat: no-repeat;
+      background-size: contain;
+    }
+
+    /* Icons for each info box */
+    .ai-education h2::before {
+      background-image: url('data:image/svg+xml;utf8,<svg fill="%233b4a59" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2a9 9 0 0 0-9 9c0 4.418 3.582 8 8 8a8.961 8.961 0 0 0 5-1.724v1.086a1 1 0 0 0 2 0v-6a1 1 0 0 0-1-1h-6a1 1 0 1 0 0 2h1.262A6.998 6.998 0 0 1 6 11a7 7 0 0 1 14 0 1 1 0 0 0 2 0 9 9 0 0 0-10-9z"/></svg>');
+    }
+
+    .about-us {
+      background: linear-gradient(135deg, #f6d365, #fda085);
+      color: #5a3e1b;
+    }
+
+    .about-us h2::before {
+      background-image: url('data:image/svg+xml;utf8,<svg fill="%235a3e1b" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4S14.21 4 12 4 8 5.79 8 8s1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>');
+    }
+
+    /* Info box paragraphs */
+    .info-box p {
+      margin-top: 0;
+    }
+
+    /* Footer */
+    footer {
+      width: 100%;
+      background: #6a4c93;
+      color: #fdf3dd;
+      text-align: center;
+      padding: 25px 10px;
+      font-size: 0.9rem;
+      user-select: none;
+      font-weight: 500;
+    }
+
+    footer a {
+      color: #fdf3dd;
+      text-decoration: underline;
+      margin: 0 8px;
+      transition: color 0.3s ease;
+    }
+
+    footer a:hover {
+      color: #a18cd1;
+    }
+
+    /* Responsive */
+    @media (max-width: 800px) {
+      .main-layout {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto;
+        width: 90vw;
+        max-width: 600px;
+      }
+
+      .left-column,
+      .right-column {
+        grid-column: 1;
+        grid-row: auto;
+        height: auto;
+        padding: 0;
+      }
+
+      .big-card,
+      .card {
+        width: 100%;
+        max-width: 100%;
+        height: auto;
+      }
+
+      .right-column {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto;
+        height: auto;
+        gap: 20px 10px;
+        padding: 0;
+      }
+
+      .info-section {
+        width: 90vw;
+        max-width: 600px;
+        padding: 30px 15px;
+        margin-bottom: 60px;
+        border-radius: 20px;
+        flex-direction: column;
+        gap: 25px;
+        box-shadow: 0 12px 25px rgba(106, 76, 147, 0.12);
+      }
+
+      .info-box {
+        flex: 1 1 auto;
+        max-width: 100% !important;
+        margin: 0 !important;
+        min-width: unset;
+        max-width: unset;
+        text-align: center;
+        align-items: center;
+        padding-left: 20px;
+        padding-right: 20px;
+      }
+
+      .info-box h2 {
+        padding-left: 0;
+      }
+
+      .info-box h2::before {
+        display: none;
+      }
+
+      .hero-banner {
+        padding: 40px 15px;
+      }
+
+      .hero-banner h2 {
+        font-size: 1.8rem;
+      }
+    }
+  </style>
+
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <!-- Logo beside the title -->
-            <img src="assets/logo.png" alt="MindPalette Logo" class="logo">
-            <div>
-                <h1>MindPalette</h1>
-                <p>Learn with us!</p>
-            </div>
-        </div>
-        <div class="card-container">
-            <div class="card note-storage big-card">
-                <div class="card-icon">
-                    <img src="icons/note.png" alt="Note Storage">
-                    <span class="plus">+</span>
-                </div>
-                <p>Note Storage</p>
-            </div>
-            <div class="card ai-assistant">
-                <div class="card-icon">
-                    <img src="icons/ai.png" alt="AI Assistant">
-                    <span class="plus">+</span>
-                </div>
-                <p>AI Assistant</p>
-            </div>
-            <div class="card quiz-mode">
-                <div class="card-icon">
-                    <img src="icons/quiz.png" alt="Quiz Mode">
-                    <span class="plus">+</span>
-                </div>
-                <p>Quiz Mode</p>
-            </div>
-            <div class="card flash-card-generator">
-                <div class="card-icon">
-                    <img src="icons/flashcard.png" alt="Flashcard Generator">
-                    <span class="plus">+</span>
-                </div>
-                <p>Flashcard Generator</p>
-            </div>
-            <div class="card study-planner">
-                <div class="card-icon">
-                    <img src="icons/planner.png" alt="Study Planner">
-                    <span class="plus">+</span>
-                </div>
-                <p>Study Planner</p>
-            </div>
-            <div class="card study-tracker">
-                <div class="card-icon">
-                    <img src="icons/tracker.png" alt="Study Tracker">
-                    <span class="plus">+</span>
-                </div>
-                <p>Study Tracker</p>
-            </div>
-            <div class="card daily-revision-planner">
-                <div class="card-icon">
-                    <img src="icons/revision.png" alt="Daily Revision Planner">
-                    <span class="plus">+</span>
-                </div>
-                <p>Daily Revision Planner</p>
-            </div>
-        </div>
+  <!-- Header -->
+  <header class="header" role="banner">
+    <img src="assets/logo.png" alt="MindPalette Logo" class="logo" />
+    <div class="header-text">
+      <h1>MindPalette</h1>
+      <p>Learn with us!</p>
     </div>
+  </header>
+
+  <!-- Hero Banner -->
+  <section class="hero-banner" role="region" aria-label="Welcome message and introduction">
+    <h2>Unlock Your Learning Potential</h2>
+    <p>Explore AI-powered tools designed for students and educators to make learning smarter, easier, and more fun.</p>
+    <a href="#features" class="btn-primary">Explore Features</a>
+  </section>
+
+  <!-- Main Content -->
+  <main class="main-layout" id="features" role="main">
+    <div class="left-column">
+      <a href="note.html" class="big-card note-storage" aria-label="Go to Note Storage">
+        <div class="card-icon">
+          <img src="icons/note.png" alt="Note Storage icon" />
+          <span class="plus" aria-hidden="true">+</span>
+        </div>
+        <p>Note Storage</p>
+      </a>
+    </div>
+
+    <div class="right-column">
+      <a href="AIAssistant.html" class="card ai-assistant" aria-label="Go to AI Assistant">
+        <div class="card-icon">
+          <img src="icons/ai.png" alt="AI Assistant icon" />
+          <span class="plus" aria-hidden="true">+</span>
+        </div>
+        <p>AI Assistant</p>
+      </a>
+
+      <a href="quiz.html" class="card quiz-mode" aria-label="Go to Quiz Mode">
+        <div class="card-icon">
+          <img src="icons/quiz.png" alt="Quiz Mode icon" />
+          <span class="plus" aria-hidden="true">+</span>
+        </div>
+        <p>Quiz Mode</p>
+      </a>
+
+      <a href="flashindex.html" class="card flash-card-generator" aria-label="Go to Flashcard Generator">
+        <div class="card-icon">
+          <img src="icons/flashcard.png" alt="Flashcard Generator icon" />
+          <span class="plus" aria-hidden="true">+</span>
+        </div>
+        <p>Flashcard Generator</p>
+      </a>
+
+      <a href="planner.html" class="card study-planner" aria-label="Go to Study Planner">
+        <div class="card-icon">
+          <img src="icons/planner.png" alt="Study Planner icon" />
+          <span class="plus" aria-hidden="true">+</span>
+        </div>
+        <p>Study Planner</p>
+      </a>
+
+      <a href="tracker.html" class="card study-tracker" aria-label="Go to Study Tracker">
+        <div class="card-icon">
+          <img src="icons/tracker.png" alt="Study Tracker icon" />
+          <span class="plus" aria-hidden="true">+</span>
+        </div>
+        <p>Study Tracker</p>
+      </a>
+
+      <a href="revision.html" class="card daily-revision-planner" aria-label="Go to Daily Revision Planner">
+        <div class="card-icon">
+          <img src="icons/revision.png" alt="Daily Revision Planner icon" />
+          <span class="plus" aria-hidden="true">+</span>
+        </div>
+        <p>Daily Revision Planner</p>
+      </a>
+    </div>
+  </main>
+
+  <!-- Info Section -->
+  <section class="info-section" aria-label="Information about AI in education and about MindPalette">
+    <div class="info-box ai-education" tabindex="0">
+      <h2>AI in Education</h2>
+      <p>
+        Artificial Intelligence is revolutionizing education by providing personalized learning experiences, intelligent tutoring systems, and automating administrative tasks, enabling educators to focus more on student engagement.
+      </p>
+    </div>
+    <div class="info-box about-us" tabindex="0">
+      <h2>About Us</h2>
+      <p>
+        MindPalette is dedicated to enhancing the learning journey through innovative digital tools and AI-powered solutions, helping students and educators achieve their full potential.
+      </p>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer role="contentinfo">
+    <p>© 2024 MindPalette. All rights reserved.</p>
+    <p>
+      Contact: <a href="mailto:info@mindpalette.com">info@mindpalette.com</a> | Follow us on
+      <a href="#" aria-label="Follow on Twitter">Twitter</a>,
+      <a href="#" aria-label="Follow on Facebook">Facebook</a>
+    </p>
+  </footer>
 </body>
 </html>
