@@ -32,209 +32,178 @@ body {
     justify-content: center; /* Center content when gap is present */
 }
 
-.date-display {
-    font-size: 1.7rem;
-    font-weight: bold;
-    color: #0b0a0a;
-    margin-left: 20px;
-    margin-bottom: 50px; /* Space between date and subject list */
-    text-align: flex; /* Center the date text within its container */
-    width: 100%; /* Ensure it takes full width of its parent (.subjects-panel) */
-}
-
-/* Subjects Panel (Left Side) */
-.subjects-panel {
+/* --- Panel Styling (Left and Right) --- */
+.subjects-panel,
+.right-panel {
+    background-color: #d6f49d ; /* White background for panels */
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08); /* Subtle shadow for depth */
+    min-height: 600px; /* Minimum height for consistency */
     display: flex;
     flex-direction: column;
-    align-items: flex-start; /* Align buttons to the left */
-    justify-content: center;
-    flex-grow: 1; /* Allows this panel to grow */
-    min-width: 300px; /* Minimum width for the subject buttons */
-    max-width: 400px; /* Max width for the subject buttons */
 }
 
+.subjects-panel {
+    flex: 1; /* Allows it to grow and shrink */
+    max-width: 350px; /* Max width for the left panel */
+    min-width: 280px; /* Minimum width before wrapping */
+}
+
+.right-panel {
+    flex: 2; /* Allows it to take more space */
+    max-width: 700px; /* Max width for the right panel */
+    min-width: 300px; /* Minimum width before wrapping */
+    position: relative; /* For absolute positioning of inner content */
+    overflow: hidden; /* Hide overflowing content during transitions */
+}
+
+/* --- Date Display --- */
+.date-display {
+    font-size: 1.1em;
+    font-weight: bold;
+    color: #555;
+    margin-bottom: 25px;
+    text-align: center;
+    /* Removed background-color, padding, border-radius */
+}
+
+/* --- Subject List Panel --- */
 #subject-list-container {
-    width: 100%;
-    max-height: 450px; /* Max height to allow scrolling for many subjects */
-    overflow-y: auto; /* Enable vertical scrolling */
+    flex-grow: 1; /* Allows the list to take available space */
+    margin-bottom: 20px;
+    overflow-y: auto; /* Enable scrolling for many subjects */
     padding-right: 10px; /* Space for scrollbar */
 }
 
-/* Scrollbar styling */
-#subject-list-container::-webkit-scrollbar {
-    width: 8px;
-}
-
-#subject-list-container::-webkit-scrollbar-track {
-    background: #f1f1f1;
-    border-radius: 10px;
-}
-
-#subject-list-container::-webkit-scrollbar-thumb {
-    background: #888;
-    border-radius: 10px;
-}
-
-#subject-list-container::-webkit-scrollbar-thumb:hover {
-    background: #555;
-}
-
-
-/* Subject button with delete icon INSIDE */
-.subject-button {
-    position: relative; /* To contain the absolute positioned delete button */
-    background-color: #a0d9e8; /* Light blue from image */
-    color: #333; /* Dark text */
-    font-size: 24px;
-    font-weight: bold;
-    padding: 15px 45px 15px 30px; /* Adjusted right padding for the cross icon */
-    border: none;
-    border-radius: 15px; /* Rounded corners */
+.subject-item {
+    /* Removed background-color and border */
+    padding: 12px 0px; /* Adjust padding for visual separation without background */
+    margin-bottom: 10px;
+    /* border-radius: 8px; */ /* No longer needed as there is no background */
+    display: flex;
+    justify-content: space-between; /* Space out name and button */
+    align-items: center;
     cursor: pointer;
-    text-align: left;
-    transition: background-color 0.2s ease, transform 0.1s ease;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    width: 100%; /* Take full width */
-    margin-bottom: 20px; /* Space between buttons */
+    transition: background-color 0.2s ease, transform 0.2s ease;
+    font-size: 1.1em; /* Increased text size for subject name */
+    border-bottom: 1px dashed #ccc; /* Add a subtle line for separation */
 }
 
-.subject-button:hover {
-    background-color: #8ed0e2;
-    transform: translateY(-2px);
+.subject-item:last-child {
+    border-bottom: none; /* No line for the last item */
 }
 
-.subject-button:active {
-    background-color: #7cc7db;
-    transform: translateY(0);
+.subject-item:hover {
+    /* Removed background-color on hover */
+    transform: translateY(-2px); /* Slight lift effect */
+    color: #007bff; /* Change text color on hover */
+}
+
+.subject-item.active {
+    /* Removed background-color for active subject */
+    color: #0056b3; /* Darker blue for active state text */
+    /* Keeping box-shadow if you want a visual highlight for active state without background */
+    box-shadow: 0 2px 8px rgba(0, 188, 212, 0.2); /* Subtle shadow for active state */
+    font-weight: bold; /* Make active subject name bolder */
+}
+
+.subject-name {
+    flex-grow: 1; /* Allows name to take available space */
+    margin-right: 10px; /* Space between name and delete button */
+    font-weight: bold;
+    font-size: 1.2em; /* Further increased text size for subject name */
 }
 
 .delete-subject-btn {
-    position: absolute;
-    top: 50%;
-    right: 15px; /* Position on the right inside the button */
-    transform: translateY(-50%);
     background: none;
     border: none;
-    color: #ff6347; /* Tomato red for delete */
-    font-size: 1.2rem; /* Smaller cross icon */
+    color: #ff6b6b; /* Red color for delete icon */
+    font-size: 1.2em;
     cursor: pointer;
-    transition: transform 0.2s ease, color 0.2s ease;
-    padding: 5px; /* Make clickable area slightly larger */
-    z-index: 1; /* Ensure it's above the button text if any overlap */
+    transition: color 0.2s ease;
+    padding: 5px; /* Added padding to make it easier to click */
 }
 
 .delete-subject-btn:hover {
-    color: #d13a29; /* Darker red on hover */
-    transform: translateY(-50%) scale(1.2); /* Slightly larger on hover */
+    color: #e63946; /* Darker red on hover */
 }
 
-/* Add New Subject Button */
 #add-subject-area {
-    width: 100%;
-    margin-top: 30px; /* Space above the add button */
+    margin-top: auto; /* Push to the bottom */
+    padding-top: 15px;
+    border-top: 1px solid #eee;
     text-align: center;
 }
 
 #add-subject-button {
-    background-color: #6c63ff; /* Purple */
+    background-color: #4CAF50; /* Green */
     color: white;
-    font-size: 1.2rem;
-    padding: 12px 25px;
+    padding: 10px 15px;
     border: none;
-    border-radius: 25px;
+    border-radius: 5px;
     cursor: pointer;
-    transition: background-color 0.2s ease, transform 0.1s ease;
+    font-size: 1em;
     display: flex;
     align-items: center;
-    justify-content: center;
-    gap: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    gap: 8px;
+    margin: 0 auto; /* Center the button */
+    transition: background-color 0.2s ease;
 }
 
 #add-subject-button:hover {
-    background-color: #5a54d1;
-    transform: translateY(-2px);
+    background-color: #45a049;
 }
 
-#add-subject-button:active {
-    background-color: #4b44b3;
-    transform: translateY(0);
-}
-
-
-/* Right Panel (Revise All you Want + Clock, and eventually Dynamic Controls) */
-.right-panel {
-    display: flex;
-    flex-direction: column; 
-    align-items: center; 
-    justify-content: flex-start; 
-    text-align: center;
-    flex-grow: 1;
-    min-width: 400px; /* Increased min-width for the right panel to accommodate the wider controls */
-    padding-left: 20px; 
-    /* Crucial for absolute positioning of children */
-    position: relative; 
-    /* Set a minimum height to ensure it always takes up space */
-    min-height: 600px; /* Adjust as needed to accommodate both elements */
-    overflow: hidden; /* Hide content when it slides out */
-}
-
-/* Default Right Content - Revise All You Want */
+/* --- Right Panel Default Content --- */
 #default-right-content {
-    display: flex;
-    flex-direction: row; 
-    align-items: center;
-    justify-content: center;
-    gap: 20px; 
-    width: 100%;
-    
-    position: absolute; /* Position absolutely within .right-panel */
+    position: absolute;
     top: 0;
     left: 0;
-    height: 100%; /* Take full height of parent */
-    /* Use transform for movement. Removed opacity/visibility for sliding out, not disappearing */
-    transition: transform 0.5s ease-out; /* Only transition transform */
-    z-index: 2; /* Ensure it's above the active-subject-controls when visible */
-}
-
-/* Class to move default content up (just visually move out of the way) */
-#default-right-content.move-up {
-    transform: translateY(-100%); /* Move completely out of view upwards */
-    /* Removed opacity: 0 and visibility: hidden */
-}
-
-
-.right-panel-text {
+    width: 100%;
+    height: 100%;
     display: flex;
     flex-direction: column;
-    align-items: flex-end; 
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    /* Removed background-color: #fff; */
+    transition: transform 0.5s ease-in-out; /* Smooth transition */
+    padding: 20px; /* Add some padding */
+}
+
+#default-right-content.move-up {
+    transform: translateY(-100%); /* Moves it completely out of view */
+}
+
+.right-panel-text {
+    margin-bottom: 20px;
 }
 
 .right-panel-heading {
-    font-size: 40px;
-    font-weight: bold;
+    font-size: 3.5rem;
     color: #333;
-    margin-bottom: 5px;
-    animation: textPulse 2s ease-in-out infinite alternate;
+    margin-bottom: 10px;
+    letter-spacing: -1px;
 }
 
 .right-panel-subheading {
-    font-size: 30px;
-    color: #333;
-    margin-bottom: 0; 
-    animation: textPulse 2s ease-in-out infinite alternate;
-    animation-delay: 0.2s;
+    font-size: 1.8rem;
+    color: #666;
+    font-style: italic;
 }
 
 .clock-image {
-    width: 200px;
+    max-width: 60%;
     height: auto;
-    transform-origin: center top;
-    animation: clockSwing 3s ease-in-out infinite alternate;
+    opacity: 0.8;
+    margin-top: 20px;
+    /* Swing animation */
+    animation: swing 2s ease-in-out infinite alternate;
 }
 
-/* Keyframes for Clock Swing Animation */
-@keyframes clockSwing {
+/* Keyframes for the swing animation */
+@keyframes swing {
     0% {
         transform: rotateZ(0deg);
     }
@@ -252,290 +221,302 @@ body {
     }
 }
 
-/* Keyframes for Text Pulse Animation */
-@keyframes textPulse {
-    0% {
-        transform: scale(1);
-        color: #333;
-    }
-    50% {
-        transform: scale(1.02);
-        color: #222;
-    }
-    100% {
-        transform: scale(1);
-        color: #333;
-    }
-}
 
-/* Dynamic Controls Panel */
+/* --- Right Panel Active Subject Controls --- */
 #active-subject-controls {
-    width: 100%;
-    height: 100%; /* Take full height of parent */
-    display: flex; 
-    flex-direction: column;
-    align-items: center;
-    
-    position: absolute; /* Position absolutely within .right-panel */
-    top: 0; /* Align to the top of the right-panel */
+    position: absolute;
+    top: 0;
     left: 0;
-
+    width: 100%;
+    height: 100%;
+    background-color: #d6f49d;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
     opacity: 0; /* Start hidden */
-    transform: translateY(100%); /* Start completely below, out of view */
-    visibility: hidden; /* Hide from screen readers and interaction initially */
-    pointer-events: none; /* Disable interaction when hidden */
-    
-    /* Smooth transition for showing/hiding */
-    transition: opacity 0.5s ease-out, transform 0.5s ease-out, visibility 0.5s; 
-    z-index: 1; /* Ensure it's below the default content when hidden */
+    transform: translateY(100%); /* Start off-screen below */
+    transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
+    overflow-y: auto; /* Enable scrolling for topic/timer content */
 }
 
-/* Class to show controls */
 #active-subject-controls.show-controls {
     opacity: 1; /* Fade in */
-    transform: translateY(0); /* Move to its intended place */
-    visibility: visible; /* Make visible for screen readers and interaction */
-    pointer-events: auto; /* Enable interaction */
-    z-index: 3; /* Bring to front when active */
+    transform: translateY(0); /* Slide into view */
 }
 
-
-.dynamic-controls-panel { 
-    background-color: #d6e381; /* Light green color */
-    padding: 30px; 
-    padding-bottom: 40px;
-    border-radius: 15px; 
-    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.05);
-    width: 100%; /* Allow it to take up the full width of its parent (.right-panel) */
-    /* No max-width here, so it will expand with .right-panel's min-width */
+#active-subject-name {
+    font-size: 2em;
+    color: #2c3e50;
+    margin-bottom: 25px;
+    text-align: center;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #ecf0f1;
 }
 
-.topic-input-group {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
+/* --- Topics Section --- */
+.topics-section {
+    margin-bottom: 30px;
+}
+
+.topics-section h3 {
+    font-size: 1.4em;
+    color: #34495e;
     margin-bottom: 15px;
-    gap: 10px; /* Space between input and button */
+    border-bottom: 1px solid #f0f0f0;
+    padding-bottom: 5px;
 }
 
-.topic-input-group label,
-.timer-controls label {
-    font-size: 1.1rem;
-    color: #555;
-    margin-bottom: 0; /* Adjusted for gap on flex column */
-}
-
-.topic-input {
-    padding: 12px;
-    font-size: 1rem;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    width: 100%; /* This remains 100% of the topic-input-group */
-    outline: none;
-    transition: border-color 0.2s ease;
-}
-
-.topic-input:focus {
-    border-color: #007bff;
-}
-
-.add-topic-button {
-    background-color: #6c63ff; /* Purple */
-    color: white;
-    font-size: 1.1rem;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.2s ease, transform 0.1s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.add-topic-button:hover {
-    background-color: #5a54d1;
-    transform: translateY(-1px);
-}
-.add-topic-button:active {
-    background-color: #4b44b3;
-    transform: translateY(0);
-}
-
-
-/* New: Topic List Styling */
-.topic-list-container {
-    width: 100%;
-    margin-top: 20px;
-    border-top: 1px solid #eee;
-    padding-top: 15px;
-    max-height: 200px; /* Limit height for scroll */
+#topic-list {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 15px;
+    max-height: 200px; /* Limit height and enable scroll if many topics */
     overflow-y: auto;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+    padding: 10px;
 }
-
-/* Scrollbar for topic list */
-.topic-list-container::-webkit-scrollbar {
-    width: 6px;
-}
-.topic-list-container::-webkit-scrollbar-track {
-    background: #f1f1f1;
-    border-radius: 10px;
-}
-.topic-list-container::-webkit-scrollbar-thumb {
-    background: #ccc;
-    border-radius: 10px;
-}
-.topic-list-container::-webkit-scrollbar-thumb:hover {
-    background: #999;
-}
-
 
 .topic-item {
     display: flex;
     align-items: center;
-    justify-content: space-between; 
-    padding: 10px 0;
-    border-bottom: 1px dashed #e0e0e0;
-    font-size: 1.1rem;
-    color: #444;
-    /* Increased transition duration for a slower, smoother effect */
-    transition: opacity 0.7s ease, transform 0.7s ease, height 0.7s ease, padding 0.7s ease, margin 0.7s ease; 
+    padding: 8px 0;
+    border-bottom: 1px dotted #eee;
+    font-size: 1.1em; /* Increased text size for topic name */
+    transition: opacity 0.3s ease, transform 0.3s ease; /* For completion animation */
 }
 
 .topic-item:last-child {
     border-bottom: none;
 }
 
-.topic-content {
-    display: flex;
-    align-items: center;
-    flex-grow: 1;
+.topic-item input[type="checkbox"] {
     margin-right: 10px;
+    transform: scale(1.2); /* Slightly larger checkbox */
+    accent-color: #27ae60; /* Green accent color */
 }
 
-.topic-checkbox {
-    margin-right: 10px;
-    width: 18px; 
-    height: 18px;
+.topic-item label {
     cursor: pointer;
-    accent-color: #6c63ff; 
-}
-
-.topic-text {
-    flex-grow: 1;
-    word-break: break-word; 
+    font-size: 1.1em; /* Ensure label text matches topic item size */
 }
 
 .topic-item.completed-topic {
-    opacity: 0; 
-    transform: translateX(-100%); 
-    height: 0; 
-    padding-top: 0;
-    padding-bottom: 0;
-    margin-top: 0;
-    margin-bottom: 0;
-    overflow: hidden; 
-    pointer-events: none; 
+    opacity: 0; /* Fade out */
+    transform: translateX(-20px); /* Slide left */
 }
 
-
-.timer-inputs {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 15px;
-    justify-content: center;
-}
-
-.timer-input {
-    padding: 10px;
-    font-size: 1.2rem;
-    width: 70px; /* Kept individual input width the same */
+#no-topics-message {
+    color: #888;
+    font-style: italic;
     text-align: center;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    outline: none;
-    transition: border-color 0.2s ease;
+    padding: 10px;
+    background-color: #f0f0f0;
+    border-radius: 5px;
 }
 
-.timer-input:focus {
-    border-color: #007bff;
-}
-
-.timer-buttons {
+.add-topic-container {
     display: flex;
     gap: 10px;
-    justify-content: center;
-    margin-top: 10px;
+    margin-top: 20px;
 }
 
-.timer-button {
-    padding: 10px 20px;
-    font-size: 1rem;
-    border: none;
-    border-radius: 20px;
-    cursor: pointer;
-    background-color: #6c63ff; 
+#add-topic-input {
+    flex-grow: 1;
+    padding: 12px 15px; /* Increased padding */
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1.1em; /* Increased font size for input */
+    outline: none;
+}
+
+#add-topic-button {
+    background-color: #3498db; /* Blue */
     color: white;
+    padding: 12px 20px; /* Increased padding */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1.1em; /* Increased font size for button */
     transition: background-color 0.2s ease;
 }
 
-.timer-button:hover {
-    background-color: #5a54d1;
+#add-topic-button:hover {
+    background-color: #2980b9;
+}
+
+/* --- Timer Section --- */
+.timer-section {
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.timer-section h3 {
+    font-size: 1.4em;
+    color: #34495e;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #f0f0f0;
+    padding-bottom: 5px;
 }
 
 .time-display {
-    font-size: 3rem; 
+    font-size: 4em;
     font-weight: bold;
-    color: #222;
-    text-align: center;
-    margin-top: 25px; 
+    color: #e74c3c; /* Red timer color */
+    background-color: #fcecec;
+    border-radius: 10px;
+    padding: 15px 20px;
     margin-bottom: 20px;
+    display: inline-block; /* To make padding effective */
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
+.button-group {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 15px;
+    flex-wrap: wrap; /* Allow wrapping on small screens */
+}
 
-/* Responsive adjustments */
-@media (max-width: 768px) {
+.timer-button {
+    background-color: #2ecc71; /* Green */
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.2s ease;
+    min-width: 90px; /* Ensure buttons have a minimum width */
+}
+
+.timer-button:hover {
+    background-color: #27ae60;
+}
+
+/* Specific colors for timer buttons */
+#start-timer-button { background-color: #2ecc71; }
+#start-timer-button:hover { background-color: #27ae60; }
+#pause-timer-button { background-color: #f39c12; }
+#pause-timer-button:hover { background-color: #e67e22; }
+#reset-timer-button { background-color: #e74c3c; }
+#reset-timer-button:hover { background-color: #c0392b; }
+
+.set-timer-button {
+    background-color: #9b59b6; /* Purple */
+    padding: 10px 15px; /* Smaller padding for duration buttons */
+}
+.set-timer-button:hover {
+    background-color: #8e44ad;
+}
+
+/* Custom Timer Box */
+.custom-timer-container {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+    justify-content: center;
+}
+
+#custom-timer-minutes {
+    padding: 12px 15px; /* Increased padding */
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1.1em; /* Increased font size for input */
+    width: 120px; /* Specific width for minutes input */
+    text-align: center;
+    outline: none;
+}
+
+#set-custom-timer-button {
+    background-color: #34495e; /* Darker blue/grey */
+    color: white;
+    padding: 12px 20px; /* Increased padding */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1.1em; /* Increased font size for button */
+    transition: background-color 0.2s ease;
+}
+
+#set-custom-timer-button:hover {
+    background-color: #2c3e50;
+}
+
+/* --- Media Queries for Responsiveness --- */
+@media (max-width: 1024px) {
     .planner-container {
-        flex-direction: column;
-        align-items: center;
+        flex-direction: column; /* Stack panels vertically */
+        gap: 30px; /* Reduce gap on smaller screens */
+    }
+
+    .subjects-panel,
+    .right-panel {
+        width: 90%; /* Take up more width */
+        max-width: 500px; /* Limit max width for a cleaner look */
+        min-height: unset; /* Allow height to adjust naturally */
+    }
+
+    /* Adjust transitions for stacked layout */
+    #default-right-content.move-up {
+        transform: translateY(-110%); /* Ensure it moves completely out */
+    }
+
+    #active-subject-controls.show-controls {
+        transform: translateY(-100%); /* Slide up from below where default content was */
+        /* To make this work smoothly, you might need to adjust the height of the right-panel dynamically in JS */
+        /* or ensure it has enough height to contain both states */
+    }
+}
+
+@media (max-width: 768px) {
+    body {
+        padding: 15px;
+    }
+
+    .planner-container {
         padding: 20px;
+        gap: 20px;
     }
 
     .subjects-panel,
     .right-panel {
         width: 100%;
-        max-width: none;
-        min-width: unset; /* Revert min-width for small screens */
-    }
-
-    .right-panel {
-        margin-top: 40px;
-        min-height: 300px; /* Adjust min-height for smaller screens */
-    }
-
-    #default-right-content {
-        flex-direction: column; 
-        gap: 15px;
-    }
-
-    /* Adjust movement for smaller screens if needed */
-    #default-right-content.move-up {
-        transform: translateY(-100%); 
-    }
-
-    .right-panel-text {
-        align-items: center; 
+        padding: 20px;
     }
 
     .right-panel-heading {
-        font-size: 32px;
+        font-size: 2.5rem;
     }
+
     .right-panel-subheading {
-        font-size: 24px;
+        font-size: 1.5rem;
     }
-    .clock-image {
-        width: 150px;
+
+    .time-display {
+        font-size: 3em;
+    }
+
+    .timer-button,
+    .set-timer-button,
+    #add-topic-button,
+    #set-custom-timer-button {
+        font-size: 0.9em;
+        padding: 8px 15px;
+    }
+
+    #add-topic-input,
+    #custom-timer-minutes {
+        font-size: 0.9em;
+        padding: 10px 12px;
+    }
+
+    .subject-item,
+    .topic-item {
+        font-size: 1em;
+    }
+    .subject-name {
+        font-size: 1.1em;
     }
 }
