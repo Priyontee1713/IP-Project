@@ -12,8 +12,7 @@
         <div class="subjects-panel">
             <div id="current-date-display" class="date-display"></div> <div id="subject-list-container">
             </div>
-            <div id="subject-list-container">
-                </div>
+            
 
             <div id="add-subject-area">
                 <button id="add-subject-button"><i class="fas fa-plus-circle"></i> Add New Subject</button>
@@ -30,7 +29,36 @@
             </div>
 
             <div id="active-subject-controls">
+                <h2 id="active-subject-name"></h2>
+                
+                <div class="topic-section">
+                    <h3>Topics:</h3>
+                    <ul id="topic-list"></ul>
+                    <p id="no-topics-message" style="display: none;">No topics yet. Add one!</p>
+
+                    <div class="add-topic-area">
+                        <input type="text" id="add-topic-input" placeholder="New topic name">
+                        <button id="add-topic-button">Add Topic</button>
+                    </div>
                 </div>
+
+                <div class="timer-section">
+                    <h3>Study Timer:</h3>
+                    <div class="time-display" id="time-display">00:00</div>
+                    <div class="button-group timer-main-buttons">
+                        <button class="timer-button" id="start-timer-button">Start</button>
+                        <button class="timer-button" id="pause-timer-button">Pause</button>
+                        <button class="timer-button" id="reset-timer-button">Reset</button>
+                    </div>
+                    
+                <div class="custom-timer-input">
+                    <input type="number" id="custom-timer-minutes" placeholder="Minutes" min="1">
+                    <button id="set-custom-timer-button">Set Custom Timer</button>
+                </div>
+                </div>
+
+                
+            </div>
         </div>
     </div>
 
