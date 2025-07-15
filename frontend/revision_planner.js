@@ -477,8 +477,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     // Clicked on delete button
                     await deleteSubject(subjectId);
                 } else if (target.classList.contains('subject-name')) {
-                    // Clicked on subject name (or any part of subject-item that's not the delete button)
-                    await activateSubject(subjectId);
+                    if (currentActiveSubjectId === subjectId) {
+                        // If it's the same subject, revert to default content
+                        showDefaultRightContent();
+                        currentActiveSubjectId = null; // Reset active subject
+                    } else {
+                        // If it's a different subject or no subject was active, activate the new one
+                        await activateSubject(subjectId);
+                    }
                 }
             }
         });
