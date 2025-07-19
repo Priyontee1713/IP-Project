@@ -1,139 +1,157 @@
-/* General Styles */
+/* Base Reset */
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Poppins', sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
 }
 
 body {
-    background-color: #dfaf65;
-    color: #333;
-    font-size: 16px;
+  background-color: #dfaf65;
+  color: #333;
+  font-size: 16px;
 }
 
-/* Container */
+/* Layout */
 .container {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    padding: 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 40px;
+  gap: 2rem;
 }
 
 /* Left Section */
 .left-section {
-    width: 45%;
-}
-
-.text-container {
-    margin-bottom: 20px;
+  width: 45%;
 }
 
 .text-container h1 {
-    font-size: 2.5rem;
-    color: #50060c;
+  font-size: 2.5rem;
+  color: #50060c;
 }
 
-/* Character and Speech Bubble */
 .character-container {
-    position: relative;
-    margin-top: 30px;
+  position: relative;
+  margin-top: 30px;
 }
 
 .character {
-    width: 350px;
-    height: auto;
-    margin-top: 60px;
-    margin-left: 200px;
+  width: 350px;
+  margin-top: 60px;
+  margin-left: 200px;
 }
 
 .speech-bubble {
-    position: absolute;
-    top: -40px; /* Adjust this value to position the bubble correctly */
-    left: 60px; /* Adjust this value to position the bubble horizontally */
-    width: 210px; /* Set the width of the bubble image */
-    height: auto;
-    margin-top: 20px;
+  position: absolute;
+  top: -40px;
+  left: 60px;
+  width: 210px;
+  margin-top: 20px;
 }
 
 /* Right Section */
 .right-section {
-    width: 50%;
-    background-color: #ffd166;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 50%;
+  background-color: #ffd166;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-/* Quiz Form */
-.quiz-form h2 {
-    font-size: 1.8rem;
-    color: #333;
-    margin-bottom: 20px;
+.right-section h2 {
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
 }
 
+/* Subject Buttons */
+.subject-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 30px;
+}
+
+.subject-btn {
+  flex: 1 1 45%;
+  background-color: #6c63ff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 12px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: background-color 0.3s ease, transform 0.2s;
+}
+
+.subject-btn:hover {
+  background-color: #4b42d8;
+  transform: translateY(-2px);
+}
+
+/* Quiz */
+.question-container {
+  margin-top: 20px;
+}
+
+.question-block {
+  margin-bottom: 20px;
+}
+
+.question-block h3 {
+  margin-bottom: 10px;
+  color: #333;
+}
+
+/* Radio Options */
 .option {
-    margin-bottom: 15px;
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
 }
 
-input[type="radio"] {
-    margin-right: 10px;
-    width: 20px;
-    height: 20px;
-    border: 2px solid #6a4c93;
-    border-radius: 50%;
-    appearance: none;
-    background-color: transparent;
-    transition: background-color 0.3s ease;
+.option input[type="radio"] {
+  margin-right: 10px;
+  width: 18px;
+  height: 18px;
+  border: 2px solid #6a4c93;
+  border-radius: 50%;
+  appearance: none;
+  background-color: transparent;
+  transition: background-color 0.3s ease;
 }
 
-input[type="radio"]:checked {
-    background-color: #6a4c93;
-    border-color: #6a4c93;
+.option input[type="radio"]:checked {
+  background-color: #6a4c93;
 }
 
-label {
-    font-size: 1.1rem;
-    color: #333;
-    cursor: pointer;
+.option label {
+  font-size: 1rem;
+  color: #333;
+  cursor: pointer;
 }
 
-/* Hover effect for options */
-input[type="radio"]:hover {
-    background-color: rgba(106, 76, 147, 0.2); /* Subtle background on hover */
-    border-color: #6a4c93;
-}
-
-label:hover {
-    color: #6a4c93;
+.option label:hover {
+  color: #6a4c93;
 }
 
 /* Submit Button */
 .submit-btn {
-    background-color: #6a4c93; /* Solid background */
-    color: white;
-    padding: 12px 20px;
-    border: none;
-    border-radius: 5px;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: all 0.3s ease; /* Smooth transition */
-    width: 100%;
-    text-align: center; /* Center the text */
-    font-weight: bold;
+  margin-top: 20px;
+  background-color: #6a4c93;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: bold;
+  width: 100%;
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
 
 .submit-btn:hover {
-    background-color: #9c67ad; /* Darker shade on hover */
-    transform: translateY(-2px); /* Subtle lift effect */
-}
-
-/* Loading text */
-.loading {
-    font-size: 1.2rem;
-    margin-left: 10px;
-    font-weight: bold;
-    color: #333;
+  background-color: #9c67ad;
+  transform: translateY(-2px);
 }
