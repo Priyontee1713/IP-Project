@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Study Tracker Fullscreen</title>
 
   <link href="https://fonts.googleapis.com/css2?family=Rye&display=swap" rel="stylesheet">
@@ -11,7 +12,7 @@
   <style>
     * {
       box-sizing: border-box;
-      margin: 15px;
+      margin: 0;
       padding: 0;
     }
 
@@ -21,23 +22,28 @@
       height: 100vh;
       display: flex;
       justify-content: center;
-      align-items: stretch;
+      align-items: flex-start;
+      overflow-x: hidden;
+      margin: 10;
     }
 
     .container {
       display: flex;
       flex-direction: row;
+      flex-wrap: wrap;
       justify-content: space-evenly;
-      align-items: stretch;
+      align-items: flex-start;
       width: 100%;
-      padding: 30px;
-      gap: 30px;
+      padding: 40px;
+      gap: 20px;
+      max-width: 1600px;
+      box-sizing: border-box;
     }
 
     .left-panel,
     .right-panel {
-      flex: 1;
-      min-width: 0;
+      flex: 1 1 45%;
+      min-width: 280px;
       display: flex;
       flex-direction: column;
       justify-content: flex-start;
@@ -50,14 +56,16 @@
       flex-grow: 1;
       display: flex;
       flex-direction: column;
-      height: 600px; /* Increased height to align with taller tracker */
+      height: 100%;
+      max-height: 400px;
+      overflow-y: auto;
     }
 
     .calendar-header {
       background-color: #ea4e4e;
       color: white;
       text-align: center;
-      padding: 10px;
+      padding: 12px;
       font-weight: bold;
     }
 
@@ -76,12 +84,19 @@
 
     .calendar td {
       border: 1px solid #fce0d9;
-      height: 70px;  /* Increased day cell height */
+      height: 50px;
+      width: 14.28%;
       cursor: pointer;
     }
 
     .calendar td:hover {
       background-color: #fce0e8;
+    }
+
+    .today {
+      background-color: #ffe4e1;
+      font-weight: bold;
+      border: 2px solid red;
     }
 
     .ai-button {
@@ -90,10 +105,11 @@
       font-weight: bold;
       border: none;
       border-radius: 10px;
-      padding: 18px;
-      font-size: 18px;
+      padding: 15px;
+      font-size: 16px;
       margin-top: 20px;
-      width: 96%;
+      width: 100%;
+      max-width: 400px;
       cursor: pointer;
     }
 
@@ -108,7 +124,7 @@
       justify-content: center;
       align-items: center;
       padding: 10px;
-      letter-spacing: 30px; 
+      letter-spacing: 30px;
     }
 
     .chart-card {
@@ -116,139 +132,332 @@
       border-radius: 20px;
       padding: 20px;
       flex: 1;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      max-width: 600px;
+      margin-bottom: 20px;
     }
 
     .chart-card h3 {
       margin-bottom: 10px;
+      font-size: 18px;
     }
 
     canvas {
       width: 100% !important;
-      height: 300px !important; /* Matches increased calendar height */
+      height: 250px !important;
+    }
+
+    @media (max-width: 1024px) {
+      .container {
+        padding: 10px;
+        gap: 10px;
+      }
+
+      .left-panel,
+      .right-panel {
+        flex: 1 1 100%;
+      }
+
+      .calendar {
+        height: 250px;
+        max-height: 300px;
+      }
+
+      .ai-button {
+        padding: 12px;
+        font-size: 14px;
+      }
+
+      .center-text {
+        font-size: 40px;
+        letter-spacing: 20px;
+      }
+
+      .chart-card h3 {
+        font-size: 16px;
+      }
+
+      canvas {
+        height: 220px !important;
+      }
     }
   </style>
 </head>
+
 <body>
 
-<div class="container">
-  <!-- Left Panel -->
-  <div class="left-panel">
-    <div class="calendar">
-      <div class="calendar-header">Calendar</div>
-      <table>
-        <thead>
-          <tr>
-            <th>Sun</th><th>Mon</th><th>Tue</th><th>Wed</th>
-            <th>Thu</th><th>Fri</th><th>Sat</th>
-          </tr>
-        </thead>
-        <tbody id="calendar-body"></tbody>
-      </table>
+  <div class="container">
+    <div class="left-panel">
+      <div class="calendar">
+        <div class="calendar-header" id="calendar-header">Calendar</div>
+        <table>
+          <thead>
+            <tr>
+              <th>Sun</th>
+              <th>Mon</th>
+              <th>Tue</th>
+              <th>Wed</th>
+              <th>Thu</th>
+              <th>Fri</th>
+              <th>Sat</th>
+            </tr>
+          </thead>
+          <tbody id="calendar-body"></tbody>
+        </table>
+      </div>
+      <button class="ai-button">Analyse with AI</button>
     </div>
-    <button class="ai-button">Analyse with AI</button>
+
+    <div class="center-text">Tracker</div>
+
+    <div class="right-panel">
+      <div class="chart-card">
+        <h3>Daily Tracker</h3>
+        <canvas id="dailyChart"></canvas>
+      </div>
+      <div class="chart-card">
+        <h3>Weekly Tracker</h3>
+        <canvas id="weeklyChart"></canvas>
+      </div>
+    </div>
   </div>
 
-  <!-- Center Vertical Text -->
-  <div class="center-text">Tracker</div>
+  <div id="modal-overlay"
+    style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:999;"
+    onclick="closeModal()"></div>
 
-  <!-- Right Panel -->
-  <div class="right-panel">
-    <div class="chart-card">
-      <h3>Daily Tracker</h3>
-      <canvas id="dailyChart"></canvas>
-    </div>
-    <div class="chart-card">
-      <h3>Weekly Tracker</h3>
-      <canvas id="weeklyChart"></canvas>
-    </div>
+  <div id="tracker-modal"
+    style="display:none; position:fixed; top:20%; left:50%; transform:translateX(-50%); background:white; border-radius:10px; padding:20px; box-shadow:0 4px 10px rgba(0,0,0,0.3); z-index:1000;">
+    <h3>Add Study Data</h3>
+    <p>Date: <span id="selected-date"></span></p>
+    <form onsubmit="event.preventDefault(); saveTrackerData();">
+      <label>Subject Name:</label><br>
+      <input id="subjects" type="text" required /><br><br>
+      <label>Topic:</label><br>
+      <input id="topic" type="text" required /><br><br>
+      <label>Start Time:</label><br>
+      <input id="startTime" type="datetime-local" required /><br><br>
+      <label>End Time:</label><br>
+      <input id="endTime" type="datetime-local" required /><br><br>
+      <button type="submit">Save</button>
+      <button type="button" onclick="closeModal()">Cancel</button>
+    </form>
   </div>
-</div>
 
-<script>
-  const calendarBody = document.getElementById("calendar-body");
-  const today = new Date();
-  const year = today.getFullYear();
-  const month = today.getMonth();
-  const firstDay = new Date(year, month, 1).getDay();
-  const totalDays = new Date(year, month + 1, 0).getDate();
+  <script>
+    const calendarBody = document.getElementById("calendar-body");
+    const calendarHeader = document.getElementById("calendar-header");
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = today.getMonth();
+    const firstDay = new Date(year, month, 1).getDay();
+    const totalDays = new Date(year, month + 1, 0).getDate();
 
-  // Sample tracker data for some days
-  const studyData = {
-    1: { bar: [10, 20, 30, 40], pie: [25, 25, 25, 25] },
-    5: { bar: [5, 15, 25, 35], pie: [40, 20, 20, 20] },
-    10: { bar: [30, 10, 10, 50], pie: [30, 10, 40, 20] },
-    15: { bar: [0, 5, 10, 20], pie: [10, 40, 30, 20] },
-    20: { bar: [10, 30, 25, 35], pie: [25, 25, 25, 25] },
-    default: { bar: [10, 30, 20, 25], pie: [25, 30, 20, 25] }
-  };
+    const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    calendarHeader.innerText = `Calendar - ${monthNames[month]} ${year}`;
 
-  let date = 1;
-  for (let i = 0; i < 6; i++) {
-    const row = document.createElement("tr");
-    for (let j = 0; j < 7; j++) {
-      const cell = document.createElement("td");
-      if (i === 0 && j < firstDay) {
-        cell.innerHTML = "";
-      } else if (date > totalDays) {
-        cell.innerHTML = "";
-      } else {
-        cell.textContent = date;
-        cell.dataset.date = date;
-        cell.addEventListener("click", () => updateCharts(parseInt(cell.dataset.date)));
-        date++;
+    let date = 1;
+    for (let i = 0; i < 6; i++) {
+      const row = document.createElement("tr");
+      for (let j = 0; j < 7; j++) {
+        const cell = document.createElement("td");
+        if (i === 0 && j < firstDay) {
+          cell.innerHTML = "";
+        } else if (date > totalDays) {
+          cell.innerHTML = "";
+        } else {
+          cell.textContent = date;
+          cell.dataset.date = date;
+          if (date == today.getDate()) cell.classList.add("today");
+          cell.addEventListener("click", () => openModal(cell.dataset.date));
+          date++;
+        }
+        row.appendChild(cell);
       }
-      row.appendChild(cell);
+      calendarBody.appendChild(row);
     }
-    calendarBody.appendChild(row);
-  }
 
-  // Init charts
-  const dailyCtx = document.getElementById('dailyChart').getContext('2d');
-  const weeklyCtx = document.getElementById('weeklyChart').getContext('2d');
+    const dailyCtx = document.getElementById('dailyChart').getContext('2d');
+    const weeklyCtx = document.getElementById('weeklyChart').getContext('2d');
 
-  const dailyChart = new Chart(dailyCtx, {
-    type: 'bar',
-    data: {
-      labels: ['Quiz 1', 'Quiz 2', 'Quiz 3', 'Quiz 4'],
-      datasets: [{
-        label: 'Score',
-        data: studyData.default.bar,
-        backgroundColor: '#69B3E7'
-      }]
-    },
-    options: {
-      responsive: true,
-      plugins: { legend: { display: false } },
-      scales: { y: { beginAtZero: true } }
-    }
-  });
+    const dailyChart = new Chart(dailyCtx, {
+      type: 'bar',
+      data: {
+        labels: [],
+        datasets: [{
+          label: 'Time Studied (hrs)',
+          data: [],
+          backgroundColor: '#69B3E7'
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { display: false } },
+        scales: { y: { beginAtZero: true } }
+      }
+    });
 
-  const weeklyChart = new Chart(weeklyCtx, {
-    type: 'pie',
-    data: {
-      labels: ['Math', 'Biology', 'Physics', 'Chemistry'],
-      datasets: [{
-        data: studyData.default.pie,
-        backgroundColor: ['#8EC8FF', '#A3DAFF', '#C4EBFF', '#E1F5FF']
-      }]
-    },
-    options: {
-      responsive: true,
-      plugins: {
-        legend: { position: 'top' }
+    const weeklyChart = new Chart(weeklyCtx, {
+      type: 'pie',
+      data: {
+        labels: [],
+        datasets: [{
+          data: [],
+          backgroundColor: [
+            '#8EC8FF', '#A3DAFF', '#C4EBFF', '#E1F5FF', '#FFCCE5', '#FFD8A9', '#B6E2D3'
+          ]
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { position: 'top' } }
+      }
+    });
+
+    async function fetchStudyDataForDate(date) {
+      try {
+        const selectedDate = new Date(year, month, date);
+        const startOfDay = new Date(selectedDate);
+        startOfDay.setHours(0, 0, 0, 0);
+        const endOfDay = new Date(selectedDate);
+        endOfDay.setHours(23, 59, 59, 999);
+
+        const res = await fetch(`http://localhost:5000/api/tracker/by-date?start=${startOfDay.toISOString()}&end=${endOfDay.toISOString()}`);
+        if (!res.ok) {
+          console.error("Failed to fetch study data");
+          return null;
+        }
+
+        const sessions = await res.json();
+        const subjectHours = {};
+        for (const session of sessions) {
+          const subjectName = session.subject_id?.name || "Unknown Subject";
+          const start = new Date(session.start_time);
+          const end = new Date(session.end_time);
+          const hours = (end - start) / (1000 * 60 * 60);
+          if (!subjectHours[subjectName]) subjectHours[subjectName] = 0;
+          subjectHours[subjectName] += hours;
+        }
+
+        return subjectHours;
+      } catch (err) {
+        console.error("Error fetching study data:", err);
+        return null;
       }
     }
-  });
 
-  function updateCharts(day) {
-    const data = studyData[day] || studyData.default;
-    dailyChart.data.datasets[0].data = data.bar;
-    weeklyChart.data.datasets[0].data = data.pie;
-    dailyChart.update();
-    weeklyChart.update();
-  }
-</script>
+    async function updateDailyChart(date) {
+      const data = await fetchStudyDataForDate(date);
+      if (!data) {
+        dailyChart.data.labels = [];
+        dailyChart.data.datasets[0].data = [];
+        dailyChart.update();
+        return;
+      }
+
+      dailyChart.data.labels = Object.keys(data);
+      dailyChart.data.datasets[0].data = Object.values(data).map(h => +h.toFixed(2));
+      dailyChart.update();
+    }
+
+    async function updateWeeklyChart() {
+      try {
+        const res = await fetch("http://localhost:5000/api/tracker/weekly");
+        if (!res.ok) {
+          console.error("Failed to fetch weekly study data");
+          return;
+        }
+
+        const sessions = await res.json();
+        const subjectHours = {};
+
+        for (const session of sessions) {
+          const subjectName = session.subject_id?.name || "Unknown Subject";
+          const start = new Date(session.start_time);
+          const end = new Date(session.end_time);
+          const hours = (end - start) / (1000 * 60 * 60);
+          if (!subjectHours[subjectName]) subjectHours[subjectName] = 0;
+          subjectHours[subjectName] += hours;
+        }
+
+        weeklyChart.data.labels = Object.keys(subjectHours);
+        weeklyChart.data.datasets[0].data = Object.values(subjectHours).map(h => +h.toFixed(2));
+        weeklyChart.update();
+      } catch (err) {
+        console.error("Error updating weekly chart:", err);
+      }
+    }
+
+    function openModal(date) {
+      document.getElementById("selected-date").innerText = date;
+      document.getElementById("tracker-modal").dataset.date = date;
+      document.getElementById("tracker-modal").style.display = "block";
+      document.getElementById("modal-overlay").style.display = "block";
+
+      updateDailyChart(parseInt(date));
+    }
+
+    function closeModal() {
+      document.getElementById("tracker-modal").style.display = "none";
+      document.getElementById("modal-overlay").style.display = "none";
+    }
+
+    async function saveTrackerData() {
+      const date = document.getElementById("tracker-modal").dataset.date;
+      const subjectName = document.getElementById("subjects").value.trim();
+      const topic = document.getElementById("topic").value.trim();
+      const startTime = document.getElementById("startTime").value;
+      const endTime = document.getElementById("endTime").value;
+
+      if (!subjectName || !topic || !startTime || !endTime) {
+        alert("Please fill out all fields.");
+        return;
+      }
+
+      if (new Date(endTime) <= new Date(startTime)) {
+        alert("End time must be after start time.");
+        return;
+      }
+
+      try {
+        const subjectRes = await fetch(`http://localhost:5000/api/subjects/by-name/${encodeURIComponent(subjectName)}`);
+        if (!subjectRes.ok) {
+          alert("Subject not found in database.");
+          return;
+        }
+
+        const subject = await subjectRes.json();
+        const subjectId = subject._id;
+
+        const response = await fetch("http://localhost:5000/api/tracker", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            subject_id: subjectId,
+            topic: topic,
+            session_date: new Date(startTime).toISOString(),
+            start_time: new Date(startTime).toISOString(),
+            end_time: new Date(endTime).toISOString()
+          })
+        });
+
+        if (response.ok) {
+          alert("Study data saved!");
+          closeModal();
+          updateDailyChart(parseInt(date));
+          updateWeeklyChart();
+        } else {
+          alert("Failed to save study data.");
+        }
+      } catch (err) {
+        console.error("Error saving tracker data:", err);
+        alert("An error occurred.");
+      }
+    }
+
+    updateWeeklyChart(); // run once on page load
+  </script>
 
 </body>
+
 </html>
