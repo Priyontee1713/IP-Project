@@ -1,45 +1,199 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MindPalette Quiz</title>
-    <!-- Poppins font from Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="quiz.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MindPalette Quiz</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="quiz.css">
 </head>
-<body>
-    <div class="container">
-        <div class="left-section">
-            <div class="text-container">
-                <h1>Study Hard, Quiz Harder!</h1>
-            </div>
-            <div class="character-container">
-                <img src="assets/quiz.png" alt="Character" class="character">
-                <img src="assets/message.png" alt="Speech Bubble" class="speech-bubble">
-            </div>
-        </div>
 
-        <div class="right-section">
-            <form class="quiz-form">
-                <h2>Is Mind Palette the best platform to study?</h2>
-                <div class="option">
-                    <input type="radio" id="yes" name="answer" value="yes">
-                    <label for="yes">Yes</label>
-                </div>
-                <div class="option">
-                    <input type="radio" id="definitely" name="answer" value="definitely">
-                    <label for="definitely">Definitely</label>
-                </div>
-                <div class="option">
-                    <input type="radio" id="always" name="answer" value="always">
-                    <label for="always">Always</label>
-                </div>
-                <button type="submit" class="submit-btn">
-                    Submit <span class="loading">...</span>
-                </button>
-            </form>
-        </div>
+<body>
+  <div class="container">
+    <!-- LEFT SECTION -->
+    <div class="left-section">
+      <div class="text-container">
+        <h1>Study Hard, Quiz Harder!</h1>
+      </div>
+      <div class="character-container">
+        <img src="assets/quiz.png" alt="Character" class="character">
+        <img src="assets/message.png" alt="Speech Bubble" class="speech-bubble">
+      </div>
     </div>
+
+    <!-- RIGHT SECTION -->
+    <div class="right-section">
+      <h2>Select a Subject</h2>
+      <div id="subjects-container" class="subject-buttons"></div>
+      <div class="question-container" id="quiz-container"></div>
+      <!-- Result will appear here -->
+      <div id="result" style="margin-top:20px; font-size:1.2rem; font-weight:600; color:#4b42d8;"></div>
+    </div>
+  </div>
+
+  <script>
+    let flashcards = [];
+    let currentIndex = 0;
+    let allAnswersSet = new Set();
+    let userAnswers = {}; // Store user's selected answers keyed by question index
+
+    async function loadSubjects() {
+      try {
+        const res = await fetch("http://localhost:5000/api/subjects");
+        const subjects = await res.json();
+        const container = document.getElementById("subjects-container");
+        container.innerHTML = ""; // Clear previous subjects
+
+        subjects.forEach(sub => {
+          const btn = document.createElement("button");
+          btn.className = "subject-btn";
+          btn.textContent = sub.name;
+          btn.onclick = () => loadFlashcards(sub._id);
+          container.appendChild(btn);
+        });
+      } catch (err) {
+        console.error("Error loading subjects", err);
+      }
+    }
+
+    function generateOptions(correctAnswer, allAnswersSet, numOptions = 4) {
+      const options = new Set();
+      options.add(correctAnswer);
+
+      const allAnswers = Array.from(allAnswersSet).filter(ans => ans !== correctAnswer);
+      while (options.size < numOptions && allAnswers.length > 0) {
+        const random = allAnswers.splice(Math.floor(Math.random() * allAnswers.length), 1)[0];
+        options.add(random);
+      }
+
+      const shuffled = Array.from(options).sort(() => Math.random() - 0.5);
+      return shuffled.map(opt => ({
+        option_text: opt,
+        is_correct: opt === correctAnswer
+      }));
+    }
+
+    async function loadFlashcards(subjectId) {
+      try {
+        const res = await fetch(`http://localhost:5000/api/flashcards?subjectId=${subjectId}`);
+        flashcards = await res.json();
+        currentIndex = 0;
+        userAnswers = {}; // reset answers on new subject
+
+        if (!Array.isArray(flashcards)) {
+          console.error("Flashcards data is not an array:", flashcards);
+          return;
+        }
+
+        allAnswersSet = new Set(flashcards.map(fc => fc.answer.trim()));
+        clearResult();
+        renderQuestion(currentIndex);
+      } catch (err) {
+        console.error("Error loading flashcards", err);
+      }
+    }
+
+    function renderQuestion(index) {
+      const container = document.getElementById("quiz-container");
+      container.innerHTML = "";
+
+      const card = flashcards[index];
+      const options = generateOptions(card.answer.trim(), allAnswersSet);
+
+      const questionDiv = document.createElement("div");
+      questionDiv.className = "question-block";
+      questionDiv.innerHTML = `<h3>${index + 1}. ${card.question}</h3>`;
+
+      options.forEach((opt, i) => {
+        const option = document.createElement("div");
+        option.className = "option";
+
+        const input = document.createElement("input");
+        input.type = "radio";
+        input.name = `q${index}`;
+        input.id = `${card._id}_${i}`;
+        input.value = opt.option_text;
+
+        // Set checked if this option matches the stored user answer for this question
+        if (userAnswers[index] === opt.option_text) {
+          input.checked = true;
+        }
+
+        // Update userAnswers on change
+        input.addEventListener("change", () => {
+          userAnswers[index] = opt.option_text;
+        });
+
+        const label = document.createElement("label");
+        label.setAttribute("for", input.id);
+        label.textContent = opt.option_text;
+
+        option.appendChild(input);
+        option.appendChild(label);
+        questionDiv.appendChild(option);
+      });
+
+      container.appendChild(questionDiv);
+
+      // Navigation buttons container
+      const navDiv = document.createElement("div");
+      navDiv.className = "nav-buttons";
+
+      if (index > 0) {
+        const prevBtn = document.createElement("button");
+        prevBtn.className = "submit-btn";
+        prevBtn.textContent = "Previous";
+        prevBtn.onclick = () => {
+          currentIndex--;
+          renderQuestion(currentIndex);
+        };
+        navDiv.appendChild(prevBtn);
+      }
+
+      if (index < flashcards.length - 1) {
+        const nextBtn = document.createElement("button");
+        nextBtn.className = "submit-btn";
+        nextBtn.textContent = "Next";
+        nextBtn.onclick = () => {
+          currentIndex++;
+          renderQuestion(currentIndex);
+        };
+        navDiv.appendChild(nextBtn);
+      } else {
+        const submitBtn = document.createElement("button");
+        submitBtn.className = "submit-btn";
+        submitBtn.textContent = "Submit";
+        submitBtn.onclick = submitAnswers;
+        navDiv.appendChild(submitBtn);
+      }
+
+      container.appendChild(navDiv);
+    }
+
+    function submitAnswers() {
+      let score = 0;
+      const total = flashcards.length;
+
+      flashcards.forEach((card, i) => {
+        if (userAnswers[i] && userAnswers[i].trim() === card.answer.trim()) {
+          score++;
+        }
+      });
+
+      displayResult(score, total);
+    }
+
+    function displayResult(score, total) {
+      const resultDiv = document.getElementById("result");
+      resultDiv.textContent = `Your Score: ${score} / ${total}`;
+    }
+
+    function clearResult() {
+      const resultDiv = document.getElementById("result");
+      resultDiv.textContent = "";
+    }
+
+    loadSubjects();
+  </script>
 </body>
 </html>
